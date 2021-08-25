@@ -203,10 +203,6 @@ dim(SRR2584863_variants)
 summary(SRR2584863_variants)
 
 
-# Aggregating and Analyzing Data with dplyr ----
-
-
-
 
 str(SRR2584863_variants)
 
@@ -246,4 +242,193 @@ names(variants)
 write.csv(SRR2584863_variants, file = "data/SRR2584863_variants.csv")
 
 ### Abrir Excel ---
+# Desde el menú File -> Import Dataset
+
+
+# Episodio 3 dplyr ----
+
+install.packages("dplyr") # Instala el paquete
+
+library(dplyr) # Carga el paquete
+
+# Cómo me doy cuenta que un paquete está cargado
+
+# Cargar datos 
+variants <- read.csv("data/combined_tidy_vcf.csv")
+
+## glimpse ----
+glimpse(variants)
+str(variants)
+
+## select ----
+
+select(variants, sample_id, REF, ALT, DP)
+
+# Seleccionar todas menos una
+select(variants, -CHROM)
+
+variants_numeric <- select_if(variants, is.numeric)
+
+glimpse(variants_numeric)
+
+## filter ----
+
+filter(variants, sample_id == "SRR2584863")
+
+variants[variants$sample_id == "SRR2584863",]
+
+## pipe ----
+
+variants %>%
+  filter(sample_id == "SRR2584863") %>%
+  select(REF, ALT, DP) %>%
+  head()
+
+
+SRR2584863_variants <- variants %>%
+  filter(sample_id == "SRR2584863") %>%
+  select(REF, ALT, DP)
+
+### head tail slice ----
+
+SRR2584863_variants %>% 
+  head() # Muestra los primeros 6 registros
+
+SRR2584863_variants %>% 
+  tail() # Muestra los últimos 6 registros
+
+SRR2584863_variants %>% 
+  slice(10:15)
+
+### Ejericicio
+
+variants %>%
+  filter(sample_id == "SRR2584863" & DP >= 10) %>%
+  select(REF, ALT, POS)
+
+unique(variants$sample_id)
+
+# Filtrar por dos condiciones de la misma variable
+variants %>%
+  filter(sample_id %in% c("SRR2584863", "SRR2584866")
+         & DP >= 10) %>%
+  select(REF, ALT, POS)
+
+## mutate ----
+
+variants %>%
+  mutate(POLPROB = 1 - (10 ^ -(QUAL/10))) %>%
+  head()
+
+# Ejercicio
+variants %>%
+  mutate(POLPROB = 1 - 10 ^ -(QUAL/10)) %>%
+  select(sample_id, POS, QUAL, POLPROB) %>%
+  head
+
+## group_by & summarise ----
+
+variants %>%
+  group_by(sample_id) %>%
+  summarize(n())
+
+variants %>%
+  group_by(sample_id) %>% 
+  tally()
+
+variants %>%
+  count(sample_id)
+
+variants %>%
+  group_by(sample_id) %>%
+  summarize(max(DP))
+
+
+# Episodio 4 ggplot2 ---- 
+
+# Instalar el paquete
+install.packages("ggplot2")
+
+library(ggplot2)
+
+# Cargamos los datos
+variants <- read.csv("data/combined_tidy_vcf.csv")
+
+ggplot(variants)
+
+ggplot(variants, aes(x = POS, y = DP))
+
+# * `geom_point()` for scatter plots, dot plots, etc.
+# * `geom_boxplot()` for, well, boxplots!
+# * `geom_line()` for trend lines, time series, etc.
+
+ggplot(variants, aes(x = POS, y = DP)) +
+  geom_point()
+
+
+# Podemos asignar un ggplot a un objeto
+coverage_plot <- ggplot(data = variants, aes(x = POS, y = DP))
+
+# Draw the plot
+coverage_plot +
+  geom_point()
+
+## Proceso iterativo de diseño ----
+coverage_plot +
+  geom_point()
+
+coverage_plot +
+  geom_point(alpha = 0.5)
+
+
+ggplot(data = variants, aes(x = POS, y = DP)) +
+  geom_point(alpha = 0.5, color = "blue")
+
+
+ggplot(data = variants, aes(x = POS, y = DP, color = sample_id)) +
+  geom_point(alpha = 0.5)
+
+ggplot(data = variants, aes(x = POS, y = DP, color = sample_id)) +
+  geom_jitter(alpha = 0.5)
+
+
+ggplot(data = variants, aes(x = POS, y = DP, color = sample_id)) +
+  geom_jitter(alpha = 0.5) +
+  labs(x = "Base Pair Position",
+       y = "Read Depth (DP)")
+
+## Faceting ----
+ggplot(data = variants, aes(x = POS, y = MQ, color = sample_id)) +
+  geom_point() +
+  labs(x = "Base Pair Position",
+       y = "Mapping Quality (MQ)") +
+  facet_grid(. ~ sample_id)
+
+
+ggplot(data = variants, aes(x = POS, y = MQ, color = sample_id)) +
+  geom_point() +
+  labs(x = "Base Pair Position",
+       y = "Mapping Quality (MQ)") +
+  facet_grid(sample_id ~ .)
+
+ggplot(data = variants, aes(x = POS, y = MQ, color = sample_id)) +
+  geom_point() +
+  labs(x = "Base Pair Position",
+       y = "Mapping Quality (MQ)") +
+  facet_grid(sample_id ~ .) +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+## bar plots ----
+ggplot(data = variants, aes(x = INDEL, fill = sample_id)) +
+  geom_bar() +
+  facet_grid(sample_id ~ .)
+
+ggplot(data = variants, aes(x = INDEL, fill = sample_id)) +
+  geom_bar() +
+  facet_grid(sample_id ~ .) +
+  theme_light()
+
+
+# https://ggplot2.tidyverse.org/reference/ggtheme.ht
 

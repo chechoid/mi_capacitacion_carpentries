@@ -1,0 +1,236 @@
+---
+title: "Visualización de Datos con ggplot2"
+author: "Sergio Garcia Mora"
+date: "26/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Visualización de datos
+
+La visualización de datos es una de las etapas fundamentales en el análisis de datos porque se relaciona con **la comunicación** de los resultados.
+
+Una buena visualización permite:
+
+-   condensar mucha información
+-   evidenciar nuestro punto de vista
+-   contar historias con datos
+
+# El paquete ggplot2
+
+Los paquetes son *extensiones* de R desarrollados por la comunidad de R que permiten agilizar lo que queremos hacer y tener más control sobre el resultado.
+
+`ggplot2` es **el** paquete por excelencia para hacer gráficos en R. Podés consultar un [cheatsheet en castellano en este link](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/data-visualization_es.pdf).
+
+Para usarlo por primera vez necesitamos hacer la instalación del paquete. Esto es algo que se hace por única vez por computadora. Si ya tenemos instalado el paquete podemos saltear este paso.
+
+> Prestá atención:
+> * a las comillas,
+> * a las mayúsculas y minúsculas
+> * paréntesis
+
+```{r instalacion}
+
+# Hace Ctrl + Enter sobre el código, o hace click en el ícono de "play" (triángulo verde) de la derecha
+install.packages("ggplot2")
+
+```
+
+Para utilizar las funciones de `ggplot2` necesitamos "activar" el paquete con la función `library()`. Ahora no son necesarias las comillas 😉
+
+```{r cargar-paquete}
+
+```
+
+## Hacer gráficos con ggplot2
+
+> Una pregunta: ¿cuando arman un rompecabezas, por dónde empiezan?
+
+Por lo general, la mayoría de las personas empezamos por los bordes porque es más fácil ubicar las piezas, y luego buscamos de armar las figuras más grandes.
+
+El paquete `ggplot2` se sustenta en una teoría llamada la *grámatica de los gráficos*, en donde los gráficos se construyen por capas en un proceso iterativo. Estas capas son las siguientes:
+
+![](https://englelab.gatech.edu/useRguide/images/dataviz/ge_themes.png){width="390"}
+
+Veamos en detalle cada una de las capas:
+
+-   **Data (Datos):** La fuente de datos que usaremos para graficar los datos.
+
+-   **Aesthetics (Estética):** Son las modificaciones estéticas que haremos asignando variables al gráfico.
+
+-   **Geometries (Geometría):** Va a ser la forma geométrica con la que vamos a representar los datos (barras, líneas, puntos, etc.).
+
+Estas tres capas son las esenciales para hacer un gráfico en `ggplot2`. Las siguientes capas nos permiten controlar otros aspectos de la visualización.
+
+-   **Facets (Facetas o lados):** Si tenemos un gráfico que combina varios elementos, los *facets* nos permiten un gráfico individual por cada elemento.
+
+-   **Statistics (Estadística):** Podemos agregar una capa que incorpore por ejemplo una regresión lineal o bien una referencia como un valor promedio.
+
+-   **Coordinates (Ejes):** Nos permite controlar los ejes, desde su presentación, o incluso los límites, etc..
+
+-   **Theme (Estilo)**: Controla aspectos visuales sobre el fondo, fuente, ejes, etc..
+
+### Datos para practicar
+
+Vamos a utilizar el siguiente `variants` para practicar, usando la función `read.csv()`
+
+```{r carga-datos}
+# Cargar la fuente de datos 
+variants <- read.csv("data/combined_tidy_vcf.csv")
+
+```
+
+## Haciendo gráficos con ggplot2
+
+Hacer gráficos con ggpplot2 es un proceso iterativo, que nos permite controlar y configurar cada característica de la visualización.
+
+Para hacer un gráfico tenemos la siguiente estructura:
+
+```{r plot-str, eval = FALSE}
+ggplot(DATA,                       # Fuente de datos
+       mapping = aes(MAPPINGS)) +  # Variables a mapear
+    GEOM_FUNCTION()                # Tipo de gráfico
+```
+
+Probemos pasar sólo la función `ggplot(variants)`
+
+```{r iter-1}
+
+```
+
+Ahora mapeemos las variables **Pair Position** (`POS`) en el eje `x` y **Read Depth** (`DP`) en el eje `y`.
+
+```{r iter-2}
+
+```
+
+Y ahora incluyamos un `geom`. Algunas de las posibles opciones son:
+* `geom_point()` para gráficos de dispersión (scatter plots)
+* `geom_boxplot()` para hacer, estee... boxplots!
+* `geom_line()` para gráficos de líneas, series de tiempo, etc.
+
+```{r iter-3}
+
+```
+
+En los gráficos de dispersión un problema que enfrentamos es la superposición de puntos. Algo muy útil es agregar algo de transparencia a los puntos con el parámetro `alpha` dentro de `geom_point()` y poniendo algún valor entre 0 y 1.
+
+Esto nos permite detectar las regiones con mayor concentración de datos, donde los puntos se hacen más oscuros.
+
+```{r iter-4}
+
+```
+
+Si queremos cambiar por ejemplo el color de los puntos, lo podemos hacer modificando el parámetro `color`.
+
+```{r iter-5}
+
+```
+
+Ahora bien, si queremos que los puntos asuman un color determinado por los valores de alguna columna, podemos **mapear esa variable dentro del `aes()`**.
+
+Mapeemos la variable `sample_id` como un `color` dentro del `aes()`.
+
+```{r iter-6}
+
+```
+
+Incluso si cambiamos el tipo de `geom` utilizado, los colores aún se mantendrán de acuerdo a `sample_id`.
+```{r iter-7}
+ggplot(data = variants, aes(x = POS, y = DP, color = sample_id)) +
+  geom_jitter(alpha = 0.5)
+```
+
+Finalmente, para mejorar la lectura del gráfico podemos modificar los nombres de los ejes.
+```{r iter-8}
+
+```
+
+
+## Faceteado
+
+El *"faceteado"*, o *faceting*, consiste en tomar un gráfico que contiene varios valores, y separarlos en un gráfico aparte para cada valor.
+
+Como vamos a probar varias opciones, guardemos la parte del código que vamos a utilizar varias veces en un objeto para reutilizarlo.
+
+```{r facet-1}
+# Crear un objeto con nuestro gráfico
+grafico1 <- ggplot(variants, 
+                   aes(x = POS, 
+                       y = MQ, 
+                       color = sample_id)) +
+ geom_point() +
+ labs(x = "Base Pair Position",
+      y = "Mapping Quality (MQ)")
+
+# Ver el gráfico
+
+```
+
+Ahora, agreguemos una capa con `facet_grid()` para separar los gráficos para cada uno de los valores de `sample_id`.
+
+```{r facet-2-column}
+
+```
+
+La capa de `facet_grid` nos permite definir si quiero separar los gráficos en filas o en columnas (`fila` ~ `columna`). El punto (`.`) es una forma de decirle a R que use una sola fila o columna.
+
+Probemos usar esta vez `sample_id` como fila.
+```{r facet-3-row}
+
+```
+
+Hay formas simples de modificar la estética del gráfico utilizando los `theme` prestablecidos de `ggplot2`.
+
+```{r}
+# Recuerda usar el facet
+# Añadir una capa con theme_
+# Eliminar la grilla con theme(panel.grid)
+
+
+
+
+
+```
+
+
+## Barplots
+
+Podemos crear gráficos de barras usando `geom_bar()` que establece el tamaño de la barra en función de la cantidad de veces que se repite un valor dentro de una columna.
+
+Probemos crear un gráfico de barras mapeando la variable `INDEL` al eje x, y coloreando las barras con la variable `sample_id`. Generemos un gráfico para cada `sample_id` por fila.
+
+```{r barplot-1}
+
+```
+
+¿Qué pasa si pasamos el parámetro `color` en vez de `fill`?
+
+```{r barplot-color}
+
+```
+
+## Estilos
+
+`ggplot2` tiene algunos estilos predefinidos que permiten modificar la estética de la visualización sin mucho esfuerzo. Las opciones con las cuenta se pueden ver en [ggplo2.tidyverse.org](https://ggplot2.tidyverse.org/reference/ggtheme.html) y son:
+
+* `theme_grey()`
+* `theme_gray()`
+* `theme_bw()`
+* `theme_linedraw()`
+* `theme_light()`
+* `theme_dark()`
+* `theme_minimal()`
+* `theme_classic()`
+* `theme_void()`
+* `theme_test()`
+
+Prueba las distinas opciones en el siguiente bloque de código:
+```{r estilos}
+grafico1 +
+  theme_
+```
+
