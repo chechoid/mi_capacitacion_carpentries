@@ -94,12 +94,156 @@ snp_genes[c(1:3,4)]
 
 # add the gene 'CYP1A1' and 'APOA5' to our list of snp genes
 # this overwrites our existing vector
-snp_genes <- c(snp_genes, "CYP1A1", "APOA5")
+snp_genes <- c(snp_genes, "CYP1A1","APOA5")
 
+# Seleccionar todo menos un elemento
+snp_genes[-6]
+
+# Modificar un elemento específico
+snp_genes[7]<- "APOA5"
+snp_genes
+
+# Seleccionar lógicamente
+snp_positions[snp_positions > 100000000] # 100 Millones
+
+# Operator	Description
+# <	less than
+# <=	less than or equal to
+# >	greater than
+# >=	greater than or equal to
+# ==	exactly equal to
+# !=	not equal to
+# !x	not x
+# a | b	a or b
+# a & b	a and b
+
+snp_positions > 100000000
+
+snp_positions[c(FALSE, FALSE, FALSE, TRUE)]
+
+which(snp_positions > 100000000)
+
+
+# Crear un objeto de límite
+snp_marker_cutoff <- 100000000
+snp_positions[snp_positions > snp_marker_cutoff]
+
+snp_genes
+
+# test to see if "ACTN3" or "APO5A" is in the snp_genes vector
+# if you are looking for more than one value, you must pass this as a vector
+
+c("ACTN3","APOA5") %in% snp_genes
+
+
+# Episodio 2 factors and data frames ----
+
+?read.csv()
 
 ## Cargar datos ----
 
-variants <- read.csv("data/SRR2584863_variants.csv", sep = ",")
-vcf <- read.csv("data/combined_tidy_vcf.csv", sep = ",")
+variants <- read.csv("data/combined_tidy_vcf.csv")
 
-str(vcf)
+
+## get summary statistics on a data frame
+
+summary(variants)
+
+
+## put the first three columns of variants into a new data frame called subset
+
+subset <- data.frame(variants[,c(1:3,6)])
+
+# Ver la estructura del data frame
+str(subset)
+
+
+## Factores ----
+
+alt_alleles <- subset$ALT
+
+# Creamos un vector con los elementos que sólo contengan un dígito
+snps <- c(alt_alleles[alt_alleles=="A"],
+          alt_alleles[alt_alleles=="T"],
+          alt_alleles[alt_alleles=="G"],
+          alt_alleles[alt_alleles=="C"])
+
+str(snps)
+
+plot(snps)
+
+# Los errores surgen porque los elementos de snps no son de tipo factor
+
+factor_snps <- factor(snps)
+
+str(factor_snps)
+
+summary(factor_snps)
+
+plot(factor_snps)
+
+
+# Si quiero generar un gráfico ordenado
+table(as.factor(snps))
+
+ordered_factor_snps <- factor(factor_snps, 
+                              levels = names(sort(table(factor_snps),decreasing = T)))
+
+plot(ordered_factor_snps)
+
+
+# create a new data frame containing only observations from SRR2584863
+
+SRR2584863_variants <- variants[variants$sample_id == "SRR2584863",]
+
+# check the dimension of the data frame
+
+dim(SRR2584863_variants)
+
+summary(SRR2584863_variants)
+
+
+# Aggregating and Analyzing Data with dplyr ----
+
+
+
+
+str(SRR2584863_variants)
+
+
+# Forzar (coerce) tipo de dato
+
+snp_positions_2 <- c("8762685", "66560624", "67545785", "154039662")
+typeof(snp_positions_2)
+
+snp_positions_2[2]
+
+as.numeric(snp_positions_2[2])
+
+snp_positions_2 <- as.numeric(snp_positions_2)
+typeof(snp_positions_2)
+
+
+snp_chromosomes_2 <- c(3, 11, 'X', 6)
+typeof(snp_chromosomes_2)
+
+snp_chromosomes_2 <- as.numeric(snp_chromosomes_2)
+snp_chromosomes_2
+
+
+### Ejercicio ordenar factores ----
+sorted_by_DP <- variants[order(variants$DP, decreasing = TRUE), ]
+
+head(sorted_by_DP$DP)
+
+# Cambiar el nombre a una columna
+colnames(variants)[colnames(variants) == "sample_id"] <- "strain"
+
+names(variants)
+
+
+# Guardar un archivo
+write.csv(SRR2584863_variants, file = "data/SRR2584863_variants.csv")
+
+### Abrir Excel ---
+
