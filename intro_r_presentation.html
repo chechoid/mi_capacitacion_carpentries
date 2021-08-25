@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Intro to R and RStudio for Genomics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Sergio Garcia Mora" />
+    <meta name="date" content="2021-08-26" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/shinobi.css" rel="stylesheet" />
+    <link href="libs/remark-css/tamu-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+background-image: url(files/r_gen.png)
+background-size: contain
+
+
+
+???
+
+Image credit: [Canva.com](https://canva.com)
+
+---
+# ¿Qué es R?
+
+**R** es un lenguaje de programación que permite hacer análisis de datos de manera rápida, reutilizable, y simple. Tiene una serie de soluciones para comunicar resultados en múltiples formatos que permiten que armar un informe o una presentación sea mucho más rápido y preciso porque hacés el análisis y la comunicación **en un solo lugar**.
+
+--
+
+Otras ventajas de R son:
+
+* Es un lenguaje de **código abierto**.
+* Su **comunidad**.
+* Es **poderoso**.
+
+--
+
+🤔 ¿En qué uso R?
+
+???
+Lenguaje de código abierto. Tanto R como RStudios son gratis, lo cual permite que cualquier persona en el mundo lo pueda instalar, lo que lo hace accesible para cualquier persona sin que tenga que abonar una licencia o utilizar una versión pirata e insegura del software.
+
+R es un lenguaje ampliamente usado por todo el mundo, desde programadores hasta analistas de datos, e investigadores que permanentemente comparten contenido y desarrollan paquetes que facilitan el trabajo de cualquier usuario, y los campos de aplicación no tienen límites. 
+
+R permite procesar grandes volúmenes de datos en poco tiempo, no requiere tener una computadora muy potente para percibir sus beneficios.
+
+---
+## Codear puede ser duro
+
+.pull-left[
+Aprender a programar es como practicar un nuevo deporte cuando tenés 40 años y han pasado décadas desde la última vez que hacías alguna actividad física.
+
+Tenés que saber que va a ser doloroso, confuso, feo y frustrante.
+
+Pero, también puede ser divertido. Tenes que encontrar la forma de lograr victorias rápidas que te hagan sentir que estás cosechando logros.
+
+Y cuando tu primer código funcione, te vas a sentir así: 
+]
+
+.pull-right[
+&lt;img src="https://movie-fanatic-res.cloudinary.com/iu/s--jWnmUCCb--/t_full/cs_srgb,f_auto,fl_strip_profile.lossy,q_auto:420/v1364991045/run-fatboy-run.jpg" /&gt;
+]
+
+---
+background-color: #696969
+class: center, middle
+
+&lt;img src="https://media.giphy.com/media/fSSGX7IHcqlDYwVYsH/giphy.gif" width="90%"/&gt;
+
+---
+# Instalando R y RStudio
+
+Las alternativas más simples para trabajar con R son en la *propia computadora*, o creando una cuenta en *RStudio Cloud*.
+
+La ventaja de trabajar en la *propia computadora* es que no dependés tanto de internet y no tenés límites en el tamaño de los archivos para usar ni tampoco en la cantidad de proyectos que podés crear.
+
+--
+
+La ventaja de trabajar en *RStudio Cloud* es que no necesitás preocuparte de la instalación de R o RStudio.
+
+---
+# Instalando R y RStudio
+## Instalación en computadora
+
+Para trabajar en R es ideal tener dos programas instalados. Ambos son **gratuitos**-
+
+1. **R**: se descarga de la página de [CRAN](https://cran.r-project.org/)
+2. **RStudio**: se descarga de la página de [RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+&gt; Nota: Mostraré como instalar R y RStudio en Windows 10. Acá pueden ver un video de [instalación en Mac](https://youtu.be/sR-0BthRivY) y aquí un video de [instalación en Linux](https://youtu.be/3ni-jP2qEWg)
+
+???
+
+CRAN: The Comprehensive R Archive Network
+
+---
+# Instalando R y RStudio
+## Crear una cuenta en la nube
+
+Para usar RStudio en la nube tenemos que crear una cuenta en [RStudio.cloud](https://rstudio.cloud/)
+
+.center[
+&lt;img src="files/rs_cloud_sign.png" width="70%"/&gt;
+]
+
+---
+# Instalando R y RStudio
+## Crear una cuenta en la nube
+
+Luego necesitamos crear una cuenta indicando email, contraseña, y nombre y apellido. También podemos asociar alguna cuenta de Google o de GitHub si lo preferimos.
+
+.center[
+&lt;img src="files/rs_cloud_login.png" width="27%"/&gt;
+]
+
+---
+# Diferencias entre R y RStudio
+
+La analogía que mejor describe la diferencia entre R y RStudio es la siguiente:
+&lt;br&gt;
+
+.center[
+&lt;img src="files/motor_cabina.png" width="55%"/&gt;
+]
+
+---
+# Los paneles de RStudio
+
+RStudio es una interfaz que nos permite tener una mayor visibilidad y control de lo que hacemos en R y simplifica la edición de código.
+
+.center[&lt;img src="files/panes.png" width="75%"/&gt;]
+
+---
+# Proyectos en RStudio
+
+RStudio nos permite crear *proyectos* desde su consola. Con cada proyecto se crea una carpeta en *"Mis documentos"* en la cual podemos organizar los archivos, scripts y datos sin que necesitemos configurar manualmente todo.
+
+Para crear un proyecto tenemos que ir al menú **Files** -&gt; **New Project...** y en la ventana que se abre, elegir la primera opción, **New Directory**, en la siguiente ventana hacemos click en **New Project** y en la última ventana, podemos definir el nombre del proyecto y en qué carpeta guardarlo..
+
+.pull-left[
+&lt;img src="files/new_project.png" width = 70%/&gt;
+]
+
+.pull-left[
+&lt;img src="files/new_projecto.png" /&gt;
+]
+
+---
+# Crear un primer script
+
+.pull-left[
+La primera vez que abrimos RStudio vemos 3 paneles:
+
+&lt;img src="files/rstudio1.png" /&gt;
+]
+
+--
+
+.pull-right[
+Creamos un script desde **File** -&gt; **New File** -&gt; **R Script**
+
+&lt;img src="files/rstudio2.png" /&gt;
+
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"language": "spanish"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
