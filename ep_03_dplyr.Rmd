@@ -1,0 +1,130 @@
+---
+title: "Agregando y Analizando Datos con dplyr"
+author: "Sergio Garcia Mora"
+date: "26/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+En este episodio presentaremos uno de los paquetes esenciales para la agregación y preparación de datos del ecosistema de `tidyverse`, el paquete `dplyr`. El cual es uno de los paquetes que nos permite alcanzar los principios de **Tidy Data**:
+
+* Cada variable debe tener su propia columna.
+* Cada observación debe estar en su propia fila.
+* Cada valor debe estar en una sola celda.
+
+
+Los paquetes son extensiones que añaden funciones que permiten hacer más cosas, y muchas veces, de manera más simple que R base. 
+
+El paquete `dplyr` también introduce el operador `%>%` (pipe, tubo en inglés) que nos permite escribir el código como secuencias de funciones, haciendo mucho más sencillo el escribir código, y especialmente interpretarlo.
+
+En este episodio repasaremos las funciones que siguen a continuación. Para mayor referencia, contamos con un [cheatsheet traducido al castellano](https://github.com/rstudio/cheatsheets/raw/master/translations/spanish/data-transformation_es.pdf).
+
+* `glimpse()`
+* `select()`
+* `filter()`
+* `mutate()`
+* `group_by()`
+* `summarise()`
+
+Una de las razones por las que este paquete se hizo tan popular es que el nombre de las funciones trata de imitar la comunicación coloquial que realizaríamos.
+
+# Trabajando con dplyr
+
+En primer lugar, como con todos los paquetes, lo primero que tenemos que hacer es instalarlo. Como `dplyr` es un paquete validado por *CRAN*, la instalación la podemos hacer con una función:
+
+```{r}
+# Instalar el paquete dplyr
+
+```
+
+Este es un paso que tenemos que hacer una sola vez por cada computadora que usamos. Luego, para usar las funciones de dplyr tenemos que cargar el paquete.
+
+```{r}
+# Cargar dplyr
+
+```
+
+¿Cómo nos damos cuenta que el paquete está cargado?
+
+Para aprender a usar este paquete, nuevamente utilizaremos los datos de `variants`.
+
+```{r carga-datos}
+
+```
+
+
+# ¿Qué es dplyr?
+
+El paquete `dplyr` forma parte de la colección de `tidyverse` e intenta brindar herramientas simples para las tareas de manipulación de datos y está pensado especialmente para trabajar con data frames.
+
+Algo que permite `dplyr` es conectarnos a una fuente de datos externa, lo cual, considerando las limitaciones de memoria que pueden tener nuestras computadoras es una gran ayuda para extraer sólo la información que necesitamos para hacer nuestros análisis.
+
+## glimpse(). Mirando a nuestro data set
+
+Similar a la función de R base `str()`, el paquete `dplyr` tiene en la función `glimpse()`  una función que nos permite echar un vistazo al data frame y brindarnos información sobre el data frame. 
+
+La ventaja de `glimpse()` es que muestra la información de manera más organizada y prolija.
+
+```{r glimpse-1}
+# Echar un vistazo al data frame variants
+
+```
+
+
+## Seleccionar columnas y filtrar filas
+
+Para elegir con qué variables (columnas) trabajar, contamos con la función `select()`. El primer argumento de la función es el nombre del data frame, luego, le indicamos cuáles son las variables con las que queremos trabajar.
+
+Por ejemplo, seleccionemos las variables `sample_id`, `REF`, `ALT`, y `DP`.
+
+```{r select-1}
+
+```
+
+Si queremos seleccionar todas las variables *menos* una, sólo necesitamos usar el signo "`-`" antes del nombre de la variable que queremos excluir.
+
+```{r select-2}
+# Seleccionar todas las variables menos CHROM
+
+```
+
+Para elegir las filas (observaciones) con las que queremos trabajar, podemos usar la función `filter()`.
+
+```{r filter-1}
+# Filtrar por sample_id cuyo valor sea SRR2584863
+
+```
+
+En este caso, hay que prestar atención al doble signo igual "`==`" y también a las comillas en el caso de que la condición sea un valor de tipo *character* o *factor*
+
+El código anterior es similar al que sigue, pero es mucho más simple de leer:
+```{r filter-2}
+variants[variants$sample_id == "SRR2584863",]
+```
+
+# El operador %>% (pipe)
+
+El operador `%>%`, que fue introducido con el paquete `magrittr`, es una de las razones por las que el paquete `dplyr` se haya vuelto tan popular.
+
+Este operador, permite escribir el código en una secuencia, pasando de una función a otra, como si fuera paso a paso, a diferencia de la versión tradicional en donde tenemos las funciones encadenadas dentro de paréntesis. Esto hace que nuestro código sea mucho más legible e interpretable para otras personas, y especialmente por nosotros mismos, cuando retomamos un script varios meses (o semanas incluso!) después.
+
+Si usas Windows, tenés un atajo de teclado con las teclas `Ctrl` + `Shift` + `M` (en Mac, es `Cmd` +  `Shift` + `M`).
+
+```{r pipe-1}
+variants %>%
+  filter(sample_id == "SRR2584863") %>%
+  select(REF, ALT, DP) %>%
+  head()
+```
+
+El código de arriba se interpreta como:
+
+1. Cargamos el data frame `variants`, ENTONCES (%>%)
+2. Filtramos los casos donde `sample_id` sea SRR2584863, ENTONCES
+3. Seleccionamos las variables REF, ALT, DP, ENTONCES
+4. Veo los 6 primeros resultados con la función `head()`.
